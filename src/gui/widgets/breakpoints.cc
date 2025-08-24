@@ -27,7 +27,9 @@
 #include "support/imgui-helpers.h"
 
 static uint32_t getValueAboutToWrite(PCSX::R3000Acpu& cpu) {
-    Mips::Decoder::Instruction instr(cpu.m_regs.code);
+    const uint32_t pc = cpu.m_regs.pc;
+    uint32_t code = cpu.readICache(pc);
+    Mips::Decoder::Instruction instr(code);
     if (instr.isStore()) {
         return instr.getValueToStore(cpu.m_regs.GPR, cpu.m_regs.CP2D.r);
     }
